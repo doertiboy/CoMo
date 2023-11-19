@@ -11,6 +11,7 @@ bool prestate1;
 bool prestate2;
 bool prestate3;
 bool prestate4;
+bool prestateThumb;
 
 void action2()
 {
@@ -24,6 +25,7 @@ void action2()
   prestate2 = false;
   prestate3 = false;
   prestate4 = false;
+  prestateThumb = false;
   gameFinished = false;
   level = 1;
   
@@ -76,8 +78,6 @@ void get_sequence()
     {
       if (digitalRead(button1) == HIGH && !prestate1)
       {
-        Serial.println("get sequence 1");
-        // analogWrite(vibration1, 1023);  
         prestate1 = true;
         state = true;
         delay(500);
@@ -86,14 +86,11 @@ void get_sequence()
           wrong_sequence();
           return;
         }
-        // analogWrite(vibration1,  0);
       }
       
       if (digitalRead(button2) == HIGH && !prestate2) 
       {
         prestate2 = true;
-        Serial.println("get sequence 2");
-        // analogWrite(vibration2, 1023); 
         state = true;
         delay(500);
         if (vibration2 != sequence[i])
@@ -101,13 +98,10 @@ void get_sequence()
           wrong_sequence();
           return;
         }
-        // analogWrite(vibration2,  0); 
       }
       
       if (digitalRead(button3) == HIGH && !prestate3) 
       {
-        Serial.println("get sequence 3");
-        // analogWrite(vibration3, 1023); 
         prestate3 = true;
         state = true;
         delay(500);
@@ -116,13 +110,10 @@ void get_sequence()
           wrong_sequence();
           return;
         }
-        // analogWrite(vibration3,  0); 
       }
       
       if (digitalRead(button4) == HIGH && !prestate4) 
       {
-        Serial.println("get sequence 4");
-        // analogWrite(vibration4, 1023); 
         prestate4 = true;
         state = true;
         delay(500);
@@ -131,14 +122,26 @@ void get_sequence()
           wrong_sequence();
           return;
         }
-        // analogWrite(vibration4,  0);
+      }
+
+      if (digitalRead(buttonThumb) == HIGH && !prestateThumb) 
+      {
+        prestateThumb = true;
+        state = true;
+        delay(500);
+        if (vibrationThumb != sequence[i])
+        {
+          wrong_sequence();
+          return;
+        }
       }
       
-      if ((digitalRead(button1) || digitalRead(button2) || digitalRead(button3) || digitalRead(button4)) == LOW){
+      if ((digitalRead(button1) || digitalRead(button2) || digitalRead(button3) || digitalRead(button4) || digitalRead(buttonThumb)) == LOW){
         prestate1 = false;
         prestate2 = false;
         prestate3 = false;
         prestate4 = false;
+        prestateThumb = false;
       }
     }
   }
@@ -154,7 +157,8 @@ void generate_sequence()
   randomSeed(millis());  
   for (int i = 0; i < MAX_LEVEL; i++)
   {
-    sequence[i]  = random(vibration1, vibration4 + 1); //7, 11
+    int index = random(0, 5);
+    sequence[i]  = vibrations[index];
   } 
 }
 
@@ -194,6 +198,7 @@ void vibrationOff() {
   analogWrite(vibration2, 0); 
   analogWrite(vibration3, 0); 
   analogWrite(vibration4, 0); 
+  analogWrite(vibrationThumb, 0); 
 }
 
 void vibrateMemoryStart() {
@@ -201,20 +206,24 @@ void vibrateMemoryStart() {
   analogWrite(vibration2, 1023);
   analogWrite(vibration3, 1023);
   analogWrite(vibration4, 1023);
+  analogWrite(vibrationThumb, 1023); 
   delay(500);
   analogWrite(vibration1, 0);
   analogWrite(vibration2, 0);
   analogWrite(vibration3, 0);
   analogWrite(vibration4, 0);
+  analogWrite(vibrationThumb, 0); 
   delay(100);
   analogWrite(vibration1, 1023);
   analogWrite(vibration2, 1023);
   analogWrite(vibration3, 1023);
   analogWrite(vibration4, 1023);
+  analogWrite(vibrationThumb, 1023); 
   delay(500);
   analogWrite(vibration1, 0);
   analogWrite(vibration2, 0);
   analogWrite(vibration3, 0);
   analogWrite(vibration4, 0);
+  analogWrite(vibrationThumb, 0); 
   delay(500);
 }

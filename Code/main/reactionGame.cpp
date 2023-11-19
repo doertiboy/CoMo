@@ -1,3 +1,7 @@
+// TO DO
+// measure time
+// count wrong pushes
+
 #include "reactionGame.h"
 #include "definitions.h"
 
@@ -7,10 +11,7 @@ int vibration = 0;
 
 void action1() {
   delay(500); //vibration does not start early
-
-  //vibrateReactionStart();
   
-  Serial.println("for");
   //game ends after 10 buttons are pushed
   for (int i = 0; i < 10; i++) {
     generateRandomVibration();
@@ -30,13 +31,15 @@ void action1() {
 void generateRandomVibration() {
   zufall2 = zufall1;
   vibration = zufall2;
-  zufall1 = random(vibration1, (vibration4 + 1));    //generates a random number
+  int index = random(0, 5);       //generates a random index
+  zufall1 = vibrations[index];    //generates a random vibration
 
   if (zufall1 == zufall2) {                        //if second random number is same as first than find a new second random number
-    while (zufall1 == zufall2)                     //that first random number is not the same as second random number
-      zufall1 = random(vibration1, (vibration4 + 1));
+    while (zufall1 == zufall2){                    //that first random number is not the same as second random number
+      index = random(0, 5); 
+      zufall1 = vibrations[index];
+    }
     analogWrite(zufall1, 1023);
-    Serial.println(zufall1);
   }
   else {                                           //if it is not the same, start vibration motor
     analogWrite(zufall1, 1023);
@@ -52,31 +55,32 @@ void checkUserInput() {
   Serial.println("check user input");
   bool state = false;
   while (!state) { 
-    if (digitalRead(vibration1) && digitalRead(button1)) { // digitalRead(vibration1) == HIGH
-      Serial.println("correct 1");       
+    if (digitalRead(vibration1) && digitalRead(button1)) { // digitalRead(vibration1) == HIGH       
       //turns off vibration motor
       analogWrite(vibration1, 0);
       state = true;                 //sets variable to remeber the right button had been pushed
     }
 
-    else if (digitalRead(vibration2) && digitalRead(button2)) { //digitalRead(vibration2) == HIGH
-      Serial.println("correct 2");  
+    else if (digitalRead(vibration2) && digitalRead(button2)) {  
       //turns off vibration motor
       analogWrite(vibration2, 0);
       state = true;                 //sets variable to remeber the right button had been pushed
     }
     
-    else if (digitalRead(vibration3) && digitalRead(button3)) { // digitalRead(vibration3) == HIGH
-      Serial.println("correct 3");   
+    else if (digitalRead(vibration3) && digitalRead(button3)) {  
       //turns off vibration motor
       analogWrite(vibration3, 0);
       state = true;                 //sets variable to remeber the right button had been pushed
     }
     
-    else if (digitalRead(vibration4) && digitalRead(button4)) { //digitalRead(vibration4) == HIGH
-      Serial.println("correct 4");  
+    else if (digitalRead(vibration4) && digitalRead(button4)) {  
       //turns off vibration motor
       analogWrite(vibration4, 0);
+      state = true;                 //sets variable to remeber the right button had been pushed
+    }
+    else if (digitalRead(vibrationThumb) && digitalRead(buttonThumb)) {  
+      //turns off vibration motor
+      analogWrite(vibrationThumb, 0);
       state = true;                 //sets variable to remeber the right button had been pushed
     }
   }        
@@ -87,10 +91,12 @@ void vibrateReactionStart() {
   analogWrite(vibration2, 1023);
   analogWrite(vibration3, 1023);
   analogWrite(vibration4, 1023);
+  analogWrite(vibrationThumb, 1023);
   delay(500);
   analogWrite(vibration1, 0);
   analogWrite(vibration2, 0);
   analogWrite(vibration3, 0);
   analogWrite(vibration4, 0);
+  analogWrite(vibrationThumb, 0);
   delay(500);
 }
