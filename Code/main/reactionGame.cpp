@@ -1,7 +1,3 @@
-// TO DO
-// measure time
-// count wrong pushes
-
 #include "reactionGame.h"
 #include "definitions.h"
 
@@ -11,7 +7,6 @@ int vibration = 0;
 
 void action1() {
   delay(500); //vibration does not start early
-  
   //game ends after 10 buttons are pushed
   for (int i = 0; i < 10; i++) {
     generateRandomVibration();
@@ -40,6 +35,7 @@ void generateRandomVibration() {
       zufall1 = vibrations[index];
     }
     analogWrite(zufall1, 1023);
+    Serial.println(zufall1);
   }
   else {                                           //if it is not the same, start vibration motor
     analogWrite(zufall1, 1023);

@@ -3,6 +3,17 @@
 
 //include libaries
 #include <Arduino.h>
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+
+// OLED 
+#define SCREEN_WIDTH 128 // OLED display width,  in pixels
+#define SCREEN_HEIGHT 64 // OLED display height, in pixels
+extern Adafruit_SSD1306 oled;
+// display menu
+#define menuReaction 10
+#define menuMemory 35
 
 //names and pinnumbers of fixed variables for arduino nano
 //button variables
@@ -12,6 +23,8 @@
 #define button4 A3
 #define buttonThumbLeft A6
 #define buttonThumbRight A7
+// threshold for analog button readout
+#define THRESHOLD 700
 
 //vibration motor variables
 #define vibration1 3

@@ -17,9 +17,6 @@ void action2()
 {
   delay(500);
 
-  //vibrateMemoryStart();
-
-  Serial.println("action2");
   //set button flags to false
   prestate1 = false;                            
   prestate2 = false;
@@ -34,7 +31,6 @@ void action2()
     delay(1000); //that vibration does not start early
   } 
   
-  Serial.println("start");
   for (int i = 0; i < level; i++){
     show_sequence();    
     get_sequence();
@@ -46,9 +42,9 @@ void action2()
   }
 }
 
-/**
- * shows the sequence by vibrating the buttons in the correct order
- */
+// /**
+//  * shows the sequence by vibrating the buttons in the correct order
+//  */
 void show_sequence()
 { 
   vibrationOff();
@@ -199,31 +195,4 @@ void vibrationOff() {
   analogWrite(vibration3, 0); 
   analogWrite(vibration4, 0); 
   analogWrite(vibrationThumb, 0); 
-}
-
-void vibrateMemoryStart() {
-  analogWrite(vibration1, 1023);
-  analogWrite(vibration2, 1023);
-  analogWrite(vibration3, 1023);
-  analogWrite(vibration4, 1023);
-  analogWrite(vibrationThumb, 1023); 
-  delay(500);
-  analogWrite(vibration1, 0);
-  analogWrite(vibration2, 0);
-  analogWrite(vibration3, 0);
-  analogWrite(vibration4, 0);
-  analogWrite(vibrationThumb, 0); 
-  delay(100);
-  analogWrite(vibration1, 1023);
-  analogWrite(vibration2, 1023);
-  analogWrite(vibration3, 1023);
-  analogWrite(vibration4, 1023);
-  analogWrite(vibrationThumb, 1023); 
-  delay(500);
-  analogWrite(vibration1, 0);
-  analogWrite(vibration2, 0);
-  analogWrite(vibration3, 0);
-  analogWrite(vibration4, 0);
-  analogWrite(vibrationThumb, 0); 
-  delay(500);
 }
