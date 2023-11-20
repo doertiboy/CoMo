@@ -1,5 +1,6 @@
 #include "memoryGame.h"
 #include "definitions.h"
+#include "show.h"
 
 const int MAX_LEVEL  = 100;
 int sequence[MAX_LEVEL];
@@ -52,7 +53,7 @@ void show_sequence()
   for (int i = 0; i < level; i++)
   {
     Serial.println(sequence[i]);
-    analogWrite(sequence[i],  1023);
+    analogWrite(sequence[i],  SPEED);
     delay(500);
     analogWrite(sequence[i], 0);
     delay(150);

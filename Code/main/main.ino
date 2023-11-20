@@ -4,7 +4,6 @@
 #include "definitions.h"
 #include "reactionGame.h"
 #include "memoryGame.h"
-#include "show.h"
 
 bool gameFinished = true;
 bool thumbRecognition = false;
@@ -47,28 +46,11 @@ void setup()
 
   showComo();
   selectThumb();
+  initialize();
 }
 
 void loop()
 {
-//   bool prestate1 = false;                          //variables to count button pushing and save the state of a button
-//   bool prestate2 = false;
-
-// // select: if button1 == HIGH || button4 == HIGH 
-//   //Serial.println("main menu"); 
-//   if (digitalRead(button1) == HIGH && !prestate1 && gameFinished) {       //checks if button 1 is pressed to start reaction game
-//     Serial.println("menu button 1");
-//     gameFinished = false;
-//     prestate1 = true;
-//     action1();                                    
-//     }
-//   else if (digitalRead(button2) == HIGH && !prestate2 && gameFinished) {  //checks if button 1 is pressed to start reaction game
-//     Serial.println("menu button 2");
-//     gameFinished = false;
-//     prestate2 = true;
-//     action2();                                           
-//   }
-
   updateMenu();
 
   // scroll menu
@@ -94,17 +76,16 @@ void loop()
   }
 
   delay(100);
-
-
 }
 
-// ----------------------------------------- FUNCTIONS -----------------------------------
+// ----------------------------------------- FUNCTIONS ----------------------------------------
 
 void selectThumb() {
   showThumb();
   while(!thumbRecognition) {
     if(analogRead(buttonThumbLeft) >= THRESHOLD) {
       buttonThumb = buttonThumbLeft;
+      vibrationThumb = vibrationThumbLeft;
       buttonScroll = A0;
       oled.clearDisplay();
       oled.setCursor(10, 20);
@@ -116,6 +97,7 @@ void selectThumb() {
     }
     else if (analogRead(buttonThumbRight) >= THRESHOLD) {
       buttonThumb = buttonThumbRight;
+      vibrationThumb = vibrationThumbRight;
       buttonScroll = A3;
       oled.clearDisplay();
       oled.setCursor(20, 20);
@@ -126,6 +108,28 @@ void selectThumb() {
       thumbRecognition = true;
     }
   }
+}
+
+void showComo() {
+  oled.clearDisplay(); 
+  oled.setTextSize(5);         
+  oled.setTextColor(WHITE);     
+  oled.setCursor(7, 15);       
+  oled.println("COMO");        
+  oled.display(); 
+  delay(5000);           
+}
+
+void showThumb() {
+  oled.clearDisplay(); 
+  oled.setTextSize(3);          
+  oled.setTextColor(WHITE);     
+  oled.setCursor(13, 10);       
+  oled.println("Daumen");        
+  oled.setTextSize(2);          
+  oled.setCursor(17, 40);       
+  oled.println("druecken");        
+  oled.display();               
 }
 
 void showMenu(int game) {
@@ -139,6 +143,31 @@ void showMenu(int game) {
   oled.setCursor(20, 35);       
   oled.println("Merken");
   oled.display();  
+}
+
+void showReactionStart() {
+  oled.clearDisplay(); 
+  oled.setTextSize(2);         
+  oled.setTextColor(WHITE);     
+  oled.setCursor(10, 10);       
+  oled.println("REAKTIONS");   
+  oled.setTextSize(3);   
+  oled.setCursor(20, 35);      
+  oled.println("SPIEL");      
+  oled.display();   
+  delay(2000);  
+}
+
+void showMemoryStart() {
+  oled.clearDisplay(); 
+  oled.setTextSize(3);         
+  oled.setTextColor(WHITE);     
+  oled.setCursor(30, 10);       
+  oled.println("MERK");     
+  oled.setCursor(20, 35);       
+  oled.println("SPIEL");      
+  oled.display();  
+  delay(2000);     
 }
 
 void updateMenu () {
@@ -156,13 +185,21 @@ void startGame() {
   switch (menu) {
     case 1: 
       showReactionStart();
-      action1();
+      // action1();
       break;
     case 2: 
       showMemoryStart();
-      action2();
+      // action2();
       break;
   }
+}
+
+void initialize() {
+  vibrations[0] = vibration1;
+  vibrations[1] = vibration2;
+  vibrations[2] = vibration3;
+  vibrations[3] = vibration4;
+  vibrations[4] = vibrationThumb;
 }
 
 void vibrateAll() {

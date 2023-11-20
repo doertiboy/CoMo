@@ -1,5 +1,6 @@
 #include "reactionGame.h"
 #include "definitions.h"
+#include "show.h"
 
 int zufall1 = 0;
 int zufall2 = 0;
@@ -34,11 +35,11 @@ void generateRandomVibration() {
       index = random(0, 5); 
       zufall1 = vibrations[index];
     }
-    analogWrite(zufall1, 1023);
+    analogWrite(zufall1, SPEED);
     Serial.println(zufall1);
   }
   else {                                           //if it is not the same, start vibration motor
-    analogWrite(zufall1, 1023);
+    analogWrite(zufall1, SPEED);
     Serial.println(zufall1);
   }
 }
@@ -51,30 +52,30 @@ void checkUserInput() {
   Serial.println("check user input");
   bool state = false;
   while (!state) { 
-    if (digitalRead(vibration1) && digitalRead(button1)) { // digitalRead(vibration1) == HIGH       
+    if (digitalRead(vibration1) && (analogRead(button1) >= THRESHOLD)) { // digitalRead(vibration1) == HIGH       
       //turns off vibration motor
       analogWrite(vibration1, 0);
       state = true;                 //sets variable to remeber the right button had been pushed
     }
 
-    else if (digitalRead(vibration2) && digitalRead(button2)) {  
+    else if (digitalRead(vibration2) && (analogRead(button2) >= THRESHOLD)) {  
       //turns off vibration motor
       analogWrite(vibration2, 0);
       state = true;                 //sets variable to remeber the right button had been pushed
     }
     
-    else if (digitalRead(vibration3) && digitalRead(button3)) {  
+    else if (digitalRead(vibration3) && (analogRead(button3) >= THRESHOLD)) {  
       //turns off vibration motor
       analogWrite(vibration3, 0);
       state = true;                 //sets variable to remeber the right button had been pushed
     }
     
-    else if (digitalRead(vibration4) && digitalRead(button4)) {  
+    else if (digitalRead(vibration4) && (analogRead(button4) >= THRESHOLD)) {  
       //turns off vibration motor
       analogWrite(vibration4, 0);
       state = true;                 //sets variable to remeber the right button had been pushed
     }
-    else if (digitalRead(vibrationThumb) && digitalRead(buttonThumb)) {  
+    else if (digitalRead(vibrationThumb) && (analogRead(buttonThumb) >= THRESHOLD)) {  
       //turns off vibration motor
       analogWrite(vibrationThumb, 0);
       state = true;                 //sets variable to remeber the right button had been pushed
@@ -82,17 +83,3 @@ void checkUserInput() {
   }        
 }
 
-void vibrateReactionStart() {
-  analogWrite(vibration1, 1023);
-  analogWrite(vibration2, 1023);
-  analogWrite(vibration3, 1023);
-  analogWrite(vibration4, 1023);
-  analogWrite(vibrationThumb, 1023);
-  delay(500);
-  analogWrite(vibration1, 0);
-  analogWrite(vibration2, 0);
-  analogWrite(vibration3, 0);
-  analogWrite(vibration4, 0);
-  analogWrite(vibrationThumb, 0);
-  delay(500);
-}

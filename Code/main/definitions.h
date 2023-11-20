@@ -10,7 +10,7 @@
 // OLED 
 #define SCREEN_WIDTH 128 // OLED display width,  in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
-extern Adafruit_SSD1306 oled;
+// extern Adafruit_SSD1306 oled;
 // display menu
 #define menuReaction 10
 #define menuMemory 35
@@ -33,6 +33,7 @@ extern Adafruit_SSD1306 oled;
 #define vibration4 9
 #define vibrationThumbLeft 10
 #define vibrationThumbRight 11
+#define SPEED 1023
 
 // condition to go into main menu after the game is finished
 extern bool gameFinished;
