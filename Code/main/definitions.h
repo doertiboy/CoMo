@@ -3,15 +3,15 @@
 
 //include libaries
 #include <Arduino.h>
-#include <Wire.h>
-#include <Adafruit_GFX.h>
-#include <Adafruit_SSD1306.h>
+// #include <Wire.h>
+// #include <Adafruit_GFX.h>
+// #include <Adafruit_SSD1306.h>
 
 // OLED 
-#define SCREEN_WIDTH 128 // OLED display width,  in pixels
-#define SCREEN_HEIGHT 64 // OLED display height, in pixels
-// extern Adafruit_SSD1306 oled;
-// display menu
+// #define SCREEN_WIDTH 128 // OLED display width,  in pixels
+// #define SCREEN_HEIGHT 64 // OLED display height, in pixels
+// // extern Adafruit_SSD1306 oled;
+// // display menu
 #define menuReaction 10
 #define menuMemory 35
 
@@ -25,6 +25,7 @@
 #define buttonThumbRight A7
 // threshold for analog button readout
 #define THRESHOLD 700
+#define ZERO 100
 
 //vibration motor variables
 #define vibration1 3
@@ -43,5 +44,12 @@ extern void vibrateAll();
 extern int buttonThumb;
 extern int vibrationThumb;
 extern int vibrations[];
+
+//flags for button pushes
+extern bool prestate1;
+extern bool prestate2;
+extern bool prestate3;
+extern bool prestate4;
+extern bool prestateThumb;
 
 #endif

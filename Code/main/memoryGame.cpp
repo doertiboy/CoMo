@@ -7,13 +7,6 @@ int sequence[MAX_LEVEL];
 int your_sequence[MAX_LEVEL];
 int level  = 1;
 
-//flags for button pushes
-bool prestate1;
-bool prestate2;
-bool prestate3;
-bool prestate4;
-bool prestateThumb;
-
 void action2()
 {
   delay(500);
@@ -164,7 +157,10 @@ void generate_sequence()
 */
 void wrong_sequence()
 {
-  Serial.println("wrong sequence");
+  // show level - 1
+  Serial.println("wrong sequence!! ");
+  Serial.print("Level: ");
+  Serial.println(level-1);
   vibrationOff();
   delay(3000);
   
@@ -183,7 +179,6 @@ void right_sequence()
   }
   else {
     gameFinished = true;
-    vibrateAll();
   } 
 } 
 

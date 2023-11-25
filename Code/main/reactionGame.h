@@ -5,4 +5,5 @@ void action1();
 void generateRandomVibration();
 void checkUserInput();
 void vibrateReactionStart();
+void stopTimer();
 #endif
