@@ -20,6 +20,12 @@
 #define LED_PIN 12
 #define LED_COUNT 6
 #define BRIGHTNESS 50 // Set BRIGHTNESS to about 1/5 (max = 255)
+#define led1 1
+#define led2 2
+#define led3 3
+#define led4 4
+#define ledThumbLeft 0
+#define ledThumbRight 5
 
 //names and pinnumbers of fixed variables for arduino nano
 //button variables
@@ -46,10 +52,12 @@
 extern bool gameFinished;
 extern void vibrateAll();
 
-// thumb button variable 
+// thumb button variables 
 extern int buttonThumb;
 extern int vibrationThumb;
+extern int ledThumb;
 extern int vibrations[];
+extern int ledArray[];
 
 //flags for button pushes
 extern bool prestate1;
@@ -59,5 +67,9 @@ extern bool prestate4;
 extern bool prestateThumb;
 
 extern Adafruit_NeoPixel leds;
+extern void ledOn(int led);
+extern void ledOff();
+
+enum Mode {vib, led, both};
 
 #endif

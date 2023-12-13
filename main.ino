@@ -12,8 +12,10 @@ bool prestateSelect = false;
 
 int buttonThumb;
 int vibrationThumb;
+int ledThumb;
 int buttonScroll;
 int vibrations[5];
+int ledArray[5];
 int menu = 1;
 
 // declare an SSD1306 display object connected to I2C
@@ -75,14 +77,9 @@ void loop()
     }
     updateMenu();
     prestateScroll = true;
-    Serial.print("analogRead: ");
-    Serial.println(analogRead(buttonScroll));
-    Serial.print("prestate: ");
-    Serial.println(prestateScroll);
     delay(500);
   }
   else if (analogRead(buttonScroll) < THRESHOLD){
-    Serial.println("set prestate to 0");
     prestateScroll = false;
   }
 
@@ -107,6 +104,7 @@ void selectThumb() {
       buttonThumb = buttonThumbLeft;
       vibrationThumb = vibrationThumbLeft;
       buttonScroll = A0;
+      ledThumb = ledThumbLeft;
       Serial.println("rechts");
       // oled.clearDisplay();
       // oled.setCursor(10, 20);
@@ -120,6 +118,7 @@ void selectThumb() {
       buttonThumb = buttonThumbRight;
       vibrationThumb = vibrationThumbRight;
       buttonScroll = A3;
+      ledThumb = ledThumbRight;
       Serial.println("links");
       // oled.clearDisplay();
       // oled.setCursor(20, 20);
@@ -131,6 +130,67 @@ void selectThumb() {
     }
   }
 }
+
+void updateMenu () {
+  switch (menu) {
+    case 1:
+      showMenu(menuReaction);
+      break;
+    case 2:
+      showMenu(menuMemory);
+      break;
+  }
+}
+
+void startGame() {
+  switch (menu) {
+    case 1:
+      showReactionStart();
+      action1();
+      break;
+    case 2:
+      showMemoryStart();
+      action2();
+      break;
+  }
+}
+
+void initialize() {
+  vibrations[0] = vibration1;
+  vibrations[1] = vibration2;
+  vibrations[2] = vibration3;
+  vibrations[3] = vibration4;
+  vibrations[4] = vibrationThumb;
+
+  ledArray[0] = led1;
+  ledArray[1] = led2;
+  ledArray[2] = led3;
+  ledArray[3] = led4;
+  ledArray[4] = ledThumb;
+}
+
+// --------------------------------------------------- CALIBRATE ---------------------------------------------------------
+int getFinger1() {
+  return map(analogRead(button1), 35, 700, 0, 100);
+}
+
+int getFinger2() {
+  return map(analogRead(button2), 0, 700, 0, 100);
+}
+
+int getFinger3() {
+  return map(analogRead(button3), 0, 500, 0, 100);
+}
+
+int getFinger4() {
+  return map(analogRead(button4), 80, 700, 0, 100);
+}
+
+int getThumb() {
+  return map(analogRead(buttonThumb), 0, 100, 0, 100);
+}
+
+// --------------------------------------------------- OLED -------------------------------------------------------
 
 // void showComo() {
 //   oled.clearDisplay();
@@ -198,37 +258,7 @@ void showMemoryStart() {
   delay(2000);
 }
 
-void updateMenu () {
-  switch (menu) {
-    case 1:
-      showMenu(menuReaction);
-      break;
-    case 2:
-      showMenu(menuMemory);
-      break;
-  }
-}
-
-void startGame() {
-  switch (menu) {
-    case 1:
-      showReactionStart();
-      action1();
-      break;
-    case 2:
-      showMemoryStart();
-      action2();
-      break;
-  }
-}
-
-void initialize() {
-  vibrations[0] = vibration1;
-  vibrations[1] = vibration2;
-  vibrations[2] = vibration3;
-  vibrations[3] = vibration4;
-  vibrations[4] = vibrationThumb;
-}
+// ------------------------------------------------------- LEDs -----------------------------------------------------------
 
 void rainbowFade2White(int wait, int rainbowLoops, int whiteLoops) {
   int fadeVal=0, fadeMax=100;
@@ -268,4 +298,17 @@ void rainbowFade2White(int wait, int rainbowLoops, int whiteLoops) {
   }
 
   delay(500); 
+}
+
+void ledOn(int led)
+{
+  leds.clear(); // Set all pixel colors to 'off'
+  leds.setPixelColor(led, leds.Color(0, 0, 150));
+  leds.show();   // Send the updated pixel colors to the hardware. 
+}
+
+void ledOff()
+{
+  leds.clear(); // Set all pixel colors to 'off'
+  leds.show();   // Send the updated pixel colors to the hardware. 
 }
