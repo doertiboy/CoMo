@@ -36,8 +36,8 @@
 #define buttonThumbLeft A7 //orange
 #define buttonThumbRight A6 //orange
 // threshold for analog button readout
-#define THRESHOLD 300
-#define ZERO 50
+#define THRESHOLD 50
+#define ZERO 10
 
 //vibration motor variables
 #define vibration1 3 //rot
@@ -71,5 +71,13 @@ extern void ledOn(int led);
 extern void ledOff();
 
 enum Mode {vib, led, both};
+extern Mode mode;
+
+// calibrated force values
+extern int getFinger1();
+extern int getFinger2();
+extern int getFinger3();
+extern int getFinger4();
+extern int getThumb();
 
 #endif

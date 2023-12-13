@@ -30,6 +30,8 @@ bool prestate3;
 bool prestate4;
 bool prestateThumb;
 
+Mode mode = both; // default
+
 void setup()
 {
   Serial.begin(19200);
@@ -72,7 +74,7 @@ void loop()
   // scroll menu
   if (analogRead(buttonScroll) > THRESHOLD && !prestateScroll) {
     menu++;
-    if (menu > 2) {
+    if (menu > 6) {
       menu = 1;
     }
     updateMenu();
@@ -100,7 +102,7 @@ void loop()
 void selectThumb() {
   showThumb();
   while (!thumbRecognition) {
-    if (analogRead(buttonThumbLeft) >= THRESHOLD) {
+    if (map(analogRead(buttonThumbLeft), 0, 80, 0, 100) >= THRESHOLD) {
       buttonThumb = buttonThumbLeft;
       vibrationThumb = vibrationThumbLeft;
       buttonScroll = A0;
@@ -114,7 +116,7 @@ void selectThumb() {
       delay(1500);
       thumbRecognition = true;
     }
-    else if (analogRead(buttonThumbRight) >= THRESHOLD) {
+    else if (map(analogRead(buttonThumbRight), 0, 80, 0, 100) >= THRESHOLD) {
       buttonThumb = buttonThumbRight;
       vibrationThumb = vibrationThumbRight;
       buttonScroll = A3;
@@ -134,10 +136,22 @@ void selectThumb() {
 void updateMenu () {
   switch (menu) {
     case 1:
-      showMenu(menuReaction);
+      showMenu("Reaktion L");
       break;
     case 2:
-      showMenu(menuMemory);
+      showMenu("Reaktion V");
+      break;
+    case 3:
+      showMenu("Reaktion B");
+      break;
+    case 4:
+      showMenu("Merken L");
+      break;
+    case 5:
+      showMenu("Merken V");
+      break;
+    case 6:
+      showMenu("Merken B");
       break;
   }
 }
@@ -145,10 +159,32 @@ void updateMenu () {
 void startGame() {
   switch (menu) {
     case 1:
+      mode = led;
       showReactionStart();
       action1();
       break;
     case 2:
+      mode = vib;
+      showReactionStart();
+      action1();
+      break;
+    case 3:
+      mode = both;
+      showReactionStart();
+      action1();
+      break;
+    case 4:
+      mode = led;
+      showMemoryStart();
+      action2();
+      break;
+    case 5:
+      mode = vib;
+      showMemoryStart();
+      action2();
+      break;
+    case 6:
+      mode = both;
       showMemoryStart();
       action2();
       break;
@@ -187,7 +223,7 @@ int getFinger4() {
 }
 
 int getThumb() {
-  return map(analogRead(buttonThumb), 0, 100, 0, 100);
+  return map(analogRead(buttonThumb), 0, 80, 0, 100);
 }
 
 // --------------------------------------------------- OLED -------------------------------------------------------
@@ -216,19 +252,19 @@ void showThumb() {
   //
 }
 
-void showMenu(int game) {
+void showMenu(String game) {
   // oled.clearDisplay();
   // oled.setTextSize(2);
   // oled.setTextColor(WHITE);
   // oled.setCursor(1, game);
   // oled.println(">");
   // oled.setCursor(20, 10);
-  // oled.println("Reaktion");
+  // oled.println("Reaktion L");
   // oled.setCursor(20, 35);
-  // oled.println("Merken");
+  // oled.println("Merken L");
   // oled.display();
   Serial.print("main menu: ");
-  Serial.println(game == 10 ? "reaction" : "memory");
+  Serial.println(game);
 }
 
 void showReactionStart() {

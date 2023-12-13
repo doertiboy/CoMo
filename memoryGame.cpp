@@ -6,7 +6,7 @@ int sequenceVib[MAX_LEVEL];
 int sequenceLed[MAX_LEVEL];
 int your_sequence[MAX_LEVEL];
 int level  = 1;
-Mode mode = both;
+
 
 void action2()
 {
@@ -84,9 +84,9 @@ void get_sequence()
     state = false;
     while (!state)
     {
-      if (analogRead(button1) > THRESHOLD && !prestate1)
+      if (getFinger1() > THRESHOLD && !prestate1)
       {
-        Serial.println("get sequence 1");
+        Serial.println("user pushed 1");
         prestate1 = true;
         state = true;
         delay(500);
@@ -96,10 +96,10 @@ void get_sequence()
         }
       }
 
-      if (analogRead(button2) > THRESHOLD && !prestate2)
+      if (getFinger2() > THRESHOLD && !prestate2)
       {
         prestate2 = true;
-        Serial.println("get sequence 2");
+        Serial.println("user pushed 2");
         state = true;
         delay(500);
         if (vibration2 != sequenceVib[i] || led2 != sequenceLed[i])
@@ -109,9 +109,9 @@ void get_sequence()
         }
       }
 
-      if (analogRead(button3) > THRESHOLD && !prestate3)
+      if (getFinger3() > THRESHOLD && !prestate3)
       {
-        Serial.println("get sequence 3");
+        Serial.println("user pushed 3");
         prestate3 = true;
         state = true;
         delay(500);
@@ -122,9 +122,9 @@ void get_sequence()
         }
       }
 
-      if (analogRead(button4) > THRESHOLD && !prestate4)
+      if (getFinger4() > THRESHOLD && !prestate4)
       {
-        Serial.println("get sequence 4");
+        Serial.println("user pushed 4");
         prestate4 = true;
         state = true;
         delay(500);
@@ -135,9 +135,9 @@ void get_sequence()
         }
       }
 
-      if (analogRead(buttonThumb) > THRESHOLD && !prestateThumb)
+      if (getThumb() > THRESHOLD && !prestateThumb)
       {
-        Serial.println("get sequence 4");
+        Serial.println("user pushed 4");
         prestateThumb = true;
         state = true;
         delay(500);
@@ -148,7 +148,7 @@ void get_sequence()
         }
       }
 
-      if ((analogRead(button1) < THRESHOLD) && (analogRead(button2) < THRESHOLD) && (analogRead(button3) < THRESHOLD) && (analogRead(button4) < THRESHOLD) && (analogRead(buttonThumb) < THRESHOLD)) {
+      if ((getFinger1() < THRESHOLD) && (getFinger2() < THRESHOLD) && (getFinger3() < THRESHOLD) && (getFinger4() < THRESHOLD) && (getThumb() < THRESHOLD)) {
         prestate1 = false;
         prestate2 = false;
         prestate3 = false;
