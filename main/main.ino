@@ -215,7 +215,7 @@ int getFinger2() {
 }
 
 int getFinger3() {
-  return map(analogRead(button3), 0, 500, 0, 100);
+  return map(analogRead(button3), 0, 300, 0, 100);
 }
 
 int getFinger4() {
@@ -336,10 +336,10 @@ void rainbowFade2White(int wait, int rainbowLoops, int whiteLoops) {
   delay(500); 
 }
 
-void ledOn(int led)
+void ledOn(int led, int r = 0, int g = 150, int b = 100)
 {
   leds.clear(); // Set all pixel colors to 'off'
-  leds.setPixelColor(led, leds.Color(0, 0, 150));
+  leds.setPixelColor(led, leds.Color(r, g, b));
   leds.show();   // Send the updated pixel colors to the hardware. 
 }
 

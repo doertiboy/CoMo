@@ -9,5 +9,4 @@ void generate_sequence();
 void wrong_sequence();
 void right_sequence();
 void vibrationOff();
-void vibrateMemoryStart();
 #endif 

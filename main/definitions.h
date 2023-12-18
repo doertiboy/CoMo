@@ -37,7 +37,8 @@
 #define buttonThumbRight A6 //orange
 // threshold for analog button readout
 #define THRESHOLD 50
-#define ZERO 10
+#define THRESHOLD_VIB 85
+#define ZERO 20
 
 //vibration motor variables
 #define vibration1 3 //rot
@@ -67,7 +68,7 @@ extern bool prestate4;
 extern bool prestateThumb;
 
 extern Adafruit_NeoPixel leds;
-extern void ledOn(int led);
+extern void ledOn(int led, int r = 0, int g = 150, int b = 100);
 extern void ledOff();
 
 enum Mode {vib, led, both};

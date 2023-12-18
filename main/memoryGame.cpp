@@ -8,8 +8,7 @@ int your_sequence[MAX_LEVEL];
 int level  = 1;
 
 
-void action2()
-{
+void action2() {
   delay(500);
   
   Serial.println("action2");
@@ -41,11 +40,13 @@ void action2()
 /**
    shows the sequence by vibrating the buttons in the correct order
 */
-void show_sequence()
-{
+void show_sequence() {
   vibrationOff();
-
+  Serial.print(mode == vib ? "vib" : (mode == led ? "led" : "both"));
+  Serial.print(", active, ");
   for (int i = 0; i < level; i++) {
+    Serial.print(sequenceLed[i] == 5 ? 0 : sequenceLed[i]);
+    Serial.print(", ");
     switch (mode) {
       case vib:
         analogWrite(sequenceVib[i],  SPEED);
@@ -69,16 +70,17 @@ void show_sequence()
         break;
     }
   }
+  Serial.println();
 }
 
 /**
    reads the input sequence of the user and evaluates it
 */
-void get_sequence()
-{
+void get_sequence() {
   // flag that indicates if the sequence is correct
   bool state = false;
-
+  Serial.print(mode == vib ? "vib" : (mode == led ? "led" : "both"));
+  Serial.print(", pressed, ");
   for  (int i = 0; i < level; i++)
   {
     state = false;
@@ -86,10 +88,12 @@ void get_sequence()
     {
       if (getFinger1() > THRESHOLD && !prestate1)
       {
-        Serial.println("user pushed 1");
+        ledOn(led1, 150, 0, 50);
+        delay(200);
+        ledOff();
+        Serial.print("1, ");
         prestate1 = true;
         state = true;
-        delay(500);
         if (vibration1 != sequenceVib[i] || led1 != sequenceLed[i]) {
           wrong_sequence();
           return;
@@ -98,10 +102,12 @@ void get_sequence()
 
       if (getFinger2() > THRESHOLD && !prestate2)
       {
+        ledOn(led2, 150, 0, 50);
+        delay(200);
+        ledOff();
         prestate2 = true;
-        Serial.println("user pushed 2");
+        Serial.print("2, ");
         state = true;
-        delay(500);
         if (vibration2 != sequenceVib[i] || led2 != sequenceLed[i])
         {
           wrong_sequence();
@@ -111,10 +117,13 @@ void get_sequence()
 
       if (getFinger3() > THRESHOLD && !prestate3)
       {
-        Serial.println("user pushed 3");
+        ledOn(led3, 150, 0, 50);
+        delay(200);
+        ledOff();
+        Serial.print("3, ");
         prestate3 = true;
         state = true;
-        delay(500);
+        
         if (vibration3 != sequenceVib[i] || led3 != sequenceLed[i])
         {
           wrong_sequence();
@@ -124,10 +133,13 @@ void get_sequence()
 
       if (getFinger4() > THRESHOLD && !prestate4)
       {
-        Serial.println("user pushed 4");
+        ledOn(led4, 150, 0, 50);
+        delay(200);
+        ledOff();
+        Serial.print("4, ");
         prestate4 = true;
         state = true;
-        delay(500);
+        
         if (vibration4 != sequenceVib[i] || led4 != sequenceLed[i])
         {
           wrong_sequence();
@@ -137,10 +149,13 @@ void get_sequence()
 
       if (getThumb() > THRESHOLD && !prestateThumb)
       {
-        Serial.println("user pushed 4");
+        ledOn(ledThumb, 150, 0, 50);
+        delay(200);
+        ledOff();
+        Serial.print("0, ");
         prestateThumb = true;
         state = true;
-        delay(500);
+        
         if (vibrationThumb != sequenceVib[i] || ledThumb != sequenceLed[i])
         {
           wrong_sequence();
@@ -148,7 +163,7 @@ void get_sequence()
         }
       }
 
-      if ((getFinger1() < THRESHOLD) && (getFinger2() < THRESHOLD) && (getFinger3() < THRESHOLD) && (getFinger4() < THRESHOLD) && (getThumb() < THRESHOLD)) {
+      if ((getFinger1() < ZERO) && (getFinger2() < ZERO) && (getFinger3() < ZERO) && (getFinger4() < ZERO) && (getThumb() < ZERO)) {
         prestate1 = false;
         prestate2 = false;
         prestate3 = false;
@@ -157,14 +172,14 @@ void get_sequence()
       }
     }
   }
+  Serial.println();
   right_sequence();
 }
 
 /**
    generates a sequence and saves it into an array
 */
-void generate_sequence()
-{
+void generate_sequence() {
   Serial.println("generate sequence");
   randomSeed(millis());
   for (int i = 0; i < MAX_LEVEL; i++)
@@ -178,23 +193,18 @@ void generate_sequence()
 /**
    turns the vibration off and sets the finished flag to true
 */
-void wrong_sequence()
-{
-  Serial.println("wrong sequence");
+void wrong_sequence() {
+  delay(1000);
   vibrationOff();
   ledOff();
-  delay(3000);
-
   gameFinished = true;
 }
 
 /**
    increments the level
 */
-void right_sequence()
-{
-  Serial.println("right sequence");
-  delay(100);
+void right_sequence() {
+  delay(1000);
   if  (level < MAX_LEVEL) {
     level++;
   }
@@ -211,4 +221,5 @@ void vibrationOff() {
   analogWrite(vibration2, 0);
   analogWrite(vibration3, 0);
   analogWrite(vibration4, 0);
+  analogWrite(vibrationThumb, 0);
 }

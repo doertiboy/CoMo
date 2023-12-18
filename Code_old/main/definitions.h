@@ -24,7 +24,7 @@
 #define buttonThumbLeft A6
 #define buttonThumbRight A7
 // threshold for analog button readout
-#define THRESHOLD 700
+#define THRESHOLD 100
 
 //vibration motor variables
 #define vibration1 3
