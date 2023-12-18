@@ -13,13 +13,10 @@ int uniqueNumbers[] = {0, 1, 2, 3, 4};
 int arraySize = 20;
 int randomNumbers[20];
 bool correctButton;
-unsigned long timer, starttimer, stoptimer, time, buttonTimer, buttonStartTimer, buttonEndTimer, s, nachkommastelle;
+unsigned long timer, starttimer, stoptimer;
 
 void action1() {
   // initialization
-  buttonTimer = 0;
-  buttonStartTimer = 0;
-  buttonEndTimer = 0;
   correctButton = false;
   prestate1 = false;
   prestate2 = false;
@@ -34,21 +31,23 @@ void action1() {
   //game ends after 20 buttons are pushed
   for (int i = 0; i < 20; i++) {
     // start timer after 1st pushed button
-    if (i == 1) {
-      starttimer = millis();
-    }
+    // if (i == 1) {
+    //   starttimer = millis();
+    // }
     generateActivation(randomNumbers[i]);
     checkUserInput(); 
     delay(100);  
   }
-  stopTimer();
+  ledOff();
   gameFinished = true;
 }
 
-// Function to generate 20 random numbers between 0 and 4, ensuring each number is repeated 4 times
+/**
+ * generates 20 random numbers between 0 and 4, ensuring each number is repeated 4 times
+*/
 void generateRandomNumbers(int outputArray[], int size) {
-    // Seed the random number generator with analog pin 0 value (unconnected pin)
-    randomSeed(analogRead(0));
+    // Seed the random number generator
+    randomSeed(millis());
 
     // Create an array with 5 unique numbers (0 to 4)
     int uniqueNumbers[] = {0, 1, 2, 3, 4};
@@ -70,26 +69,18 @@ void generateRandomNumbers(int outputArray[], int size) {
         outputArray[j] = temp;
     }
 }
+
 /**
  * generates a random vibration
  * generates a random number and compares it to the last one to not select the same pin again
  * sets the according pin to SPEED to activate the vibration motor
 */
 void generateActivation(int random) {
-  //indexOld = index;
-  //index = random(0, 5);       //generates a random index
   rndNumVib = vibrations[random];  //generates a random vibration
   rndNumLed = ledArray[random];    //generates a random led
 
-  // if (index == indexOld) {                        //if second random number is same as first than find a new second random number
-  //   while (index == indexOld){                    //that first random number is not the same as second random number
-  //     index = random(0, 5); 
-  //     rndNumVib = vibrations[index];
-  //     rndNumLed = ledArray[index];
-  //   }
-  // }
-
   delay(1500);
+  starttimer = millis();
   switch (mode) {
     case vib:
       threshold = THRESHOLD_VIB;
@@ -129,11 +120,10 @@ void checkUserInput() {
   check:
     if (rndNumVib == vibration1) { 
       if(getFinger1() >= threshold) {
-        buttonStartTimer = millis();  //start timer for pushing state of button  
         analogWrite(vibration1, 0);   //turns off vibration motor
         ledOff();
+        stoptimer = millis();
         correctButton = true;         //sets variable to remeber the right button had been pushed
-        //goto check;
       }
       // checks if another button is pushed and increments cntWrong 
       else if ((getFinger2() >= threshold) && !prestate2 && !correctButton){
@@ -159,12 +149,11 @@ void checkUserInput() {
     }
 
     else if (rndNumVib == vibration2) { //analogRead(vibration2) == SPEED
-      if (getFinger2() >= threshold) {
-        buttonStartTimer = millis();  //start timer for pushing state of button     
+      if (getFinger2() >= threshold) {  
         analogWrite(vibration2, 0);   //turns off vibration motor
         ledOff();
+        stoptimer = millis();
         correctButton = true;         //sets variable to remeber the right button had been pushed
-        //goto check;
       }    
       // checks if another button is pushed and increments cntWrong 
       else if ((getFinger1() >= threshold) && !prestate1 && !correctButton){
@@ -191,11 +180,10 @@ void checkUserInput() {
     
     else if (rndNumVib == vibration3) {  //analogRead(vibration3) == SPEED
       if (getFinger3() >= threshold) {
-        buttonStartTimer = millis();  //start timer for pushing state of button  
         ledOff();   
         analogWrite(vibration3, 0);   //turns off vibration motor
+        stoptimer = millis();
         correctButton = true;         //sets variable to remeber the right button had been pushed
-        //goto check;
       }    
       // checks if another button is pushed and increments cntWrong 
       else if ((getFinger1() >= threshold) && !prestate1 && !correctButton){
@@ -222,11 +210,10 @@ void checkUserInput() {
     
     else if (rndNumVib == vibration4) { //analogRead(vibration4) == SPEED
       if (getFinger4() >= threshold) {
-        buttonStartTimer = millis();  //start timer for pushing state of button  
         ledOff();   
         analogWrite(vibration4, 0);   //turns off vibration motor
+        stoptimer = millis();
         correctButton = true;         //sets variable to remeber the right button had been pushed
-        //goto check;
       }    
       // checks if another button is pushed and increments cntWrong 
       else if ((getFinger1() >= threshold) && !prestate1 && !correctButton){
@@ -252,11 +239,10 @@ void checkUserInput() {
     }
     else if (rndNumVib == vibrationThumb) { // analogRead(vibrationThumb) == SPEED
       if (getThumb() >= threshold) {
-        buttonStartTimer = millis();  //start timer for pushing state of button  
         ledOff();   
         analogWrite(vibrationThumb, 0);   //turns off vibration motor
+        stoptimer = millis();
         correctButton = true;         //sets variable to remeber the right button had been pushed
-        //goto check;
       }    
       // checks if another button is pushed and increments cntWrong 
       else if ((getFinger1() >= threshold) && !prestate1 && !correctButton){
@@ -291,22 +277,12 @@ void checkUserInput() {
 
       // only leave while loop if correct button has been pushed and is released again to avoid wrong counting in next iteration
       if(correctButton) {
-        Serial.println();
-        buttonEndTimer = millis();
-        buttonTimer += buttonEndTimer - buttonStartTimer;
+        Serial.print(", ");
+        Serial.println(stoptimer - starttimer);
+        //Serial.println();
         state = true;
       }
     }
   }        
 }
 
-void stopTimer() {
-  ledOff();
-  stoptimer = millis();
-  time = stoptimer - starttimer - buttonTimer - 900;  // 900 ms delay in for loop
-  s = time / 1000;                                    //calculation to get the needed time in seconds
-  nachkommastelle = (time - (s * 1000)) / 100;        //calculation to get the decimale place of the number
-
-  Serial.print("Time, ");
-  Serial.println(time);
-}
