@@ -215,7 +215,7 @@ int getFinger2() {
 }
 
 int getFinger3() {
-  return map(analogRead(button3), 0, 300, 0, 100);
+  return map(analogRead(button3), 0, 120, 0, 100);
 }
 
 int getFinger4() {
@@ -223,7 +223,7 @@ int getFinger4() {
 }
 
 int getThumb() {
-  return map(analogRead(buttonThumb), 0, 80, 0, 100);
+  return map(analogRead(buttonThumb), 0, 10, 0, 100); //50
 }
 
 // --------------------------------------------------- OLED -------------------------------------------------------
