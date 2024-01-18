@@ -37,7 +37,7 @@
 #define buttonThumbRight A6 //orange
 // threshold for analog button readout
 #define THRESHOLD 50
-#define THRESHOLD_VIB 85
+#define THRESHOLD_VIB 105 //85
 #define ZERO 20
 
 //vibration motor variables
